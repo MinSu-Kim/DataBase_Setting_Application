@@ -14,14 +14,20 @@ import java.util.List;
 
 import database_setting.jdbc.MySQLJdbcUtil;
 
-public class ExportService {
+public class ExportService extends AbstractService{
 
-	public void service(String propFile) {
+	@Override
+	public void service(String...propFile) {
 		checkBackupDir();
-		List<String> tables = Arrays.asList("product","sale","saledetail", "salefull");
+		List<String> tables = getTables();
 		for(String tblName : tables) {
-			exportData(propFile, "select * from "+ tblName, getFilePath(tblName));
+			exportData(propFile[0], "select * from "+ tblName, getFilePath(tblName,"BackupFiles"));
 		}		
+	}
+
+	@Override
+	public List<String> getTables() {
+		return Arrays.asList("product","sale","saledetail", "salefull");
 	}
 
 	private void exportData(String propFile, String sql, String exportPath){
@@ -39,11 +45,6 @@ public class ExportService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-	}
-	
-	private String getFilePath(String tableName) {
-		String importPath = System.getProperty("user.dir")+ "\\BackupFiles\\";
-		return String.format("%s%s.txt", importPath, tableName).replace("\\", "/");
 	}
 	
 	private void checkBackupDir() {

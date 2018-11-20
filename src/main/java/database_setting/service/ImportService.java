@@ -9,16 +9,17 @@ import java.util.List;
 import database_setting.jdbc.LogUtil;
 import database_setting.jdbc.MySQLJdbcUtil;
 
-public class ImportService {
+public class ImportService extends AbstractService{
 	
-	public void service(String propFile) {	
-		try (Connection con = MySQLJdbcUtil.getConnection(propFile);
+	@Override
+	public void service(String...propFile) {	
+		try (Connection con = MySQLJdbcUtil.getConnection(propFile[0]);
 				Statement stmt = con.createStatement()) {
 			stmt.addBatch("SET FOREIGN_KEY_CHECKS = 0");
-			List<String> tables = Arrays.asList("product", "sale", "saledetail", "salefull");
+			List<String> tables = getTables();
 			String sql = null;
 			for (String tableName : tables) {
-				sql = String.format("LOAD DATA LOCAL INFILE '%s' IGNORE INTO TABLE %s character set 'UTF8' fields TERMINATED by ','",getFilePath(tableName), tableName);
+				sql = String.format("LOAD DATA LOCAL INFILE '%s' IGNORE INTO TABLE %s character set 'UTF8' fields TERMINATED by ','",getFilePath(tableName, "DataFiles"), tableName);
 				stmt.addBatch(sql);
 				LogUtil.prnLog(sql);
 			}
@@ -30,9 +31,9 @@ public class ImportService {
 		}	
 	}
 
-	private String getFilePath(String tableName) {
-		String importPath = System.getProperty("user.dir")+ "\\DataFiles\\";
-		return String.format("%s%s.txt", importPath, tableName).replace("\\", "/");
+	@Override
+	public List<String> getTables() {
+		return Arrays.asList("product", "sale", "salefull");
 	}
 	
 }

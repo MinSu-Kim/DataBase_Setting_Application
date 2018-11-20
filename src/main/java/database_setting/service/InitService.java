@@ -8,12 +8,14 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 import database_setting.jdbc.LogUtil;
 import database_setting.jdbc.MySQLJdbcUtil;
 
-public class InitService {
+public class InitService extends AbstractService{
 	
+	@Override
 	public void service(String...propFile) {	
 		createTableOrProcedureAndTrigger(propFile[0], "create_database.txt", false);
 		createTableOrProcedureAndTrigger(propFile[0], "create_user_sql.txt", false);
@@ -26,6 +28,7 @@ public class InitService {
 		try (InputStream is = ClassLoader.getSystemResourceAsStream("sql/" + execSqlFile);
 				BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));) {
 			StringBuilder statement = new StringBuilder();
+			
 			for (String line; (line = br.readLine()) != null;) {
 				if (line.startsWith("--"))
 					continue;
@@ -47,6 +50,7 @@ public class InitService {
 					}
 				}
 			}
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -62,6 +66,11 @@ public class InitService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	protected List<String> getTables() {
+		throw new UnsupportedOperationException();
 	}
 
 }
