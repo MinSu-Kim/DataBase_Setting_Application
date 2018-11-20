@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+//소스 인코딩지정
+tasks.withType(JavaCompile) {
+   options.encoding= 'UTF-8'
+}
+
+repositories {
+    jcenter()
+}
+
+mainClassName = 'database_setting.Main'
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.mchange/c3p0
+	compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
+    
+	// https://mvnrepository.com/artifact/mysql/mysql-connector-java
+	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.47'
+	
+	// https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.0'
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.0'
+	
+    testImplementation 'junit:junit:4.12'
+}
+
+jar {
+	version = 1.0
+	baseName= 'Database_Setting_Application'
+	appendix = 'bin'
+	manifest{
+		attributes 'Title': baseName, 'Version': version, 'Main-Class': mainClassName
+	}
+	dependsOn configurations.runtime
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
+}

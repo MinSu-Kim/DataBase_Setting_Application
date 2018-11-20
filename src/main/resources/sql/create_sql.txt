@@ -1,0 +1,51 @@
+-- 제품
+CREATE TABLE product (
+	code  CHAR(4)     NOT NULL primary key COMMENT '코드', -- 코드
+	name  VARCHAR(20) NOT NULL COMMENT '제품명' -- 제품명
+);
+
+-- 판매정보
+CREATE TABLE sale (
+	no         INT(11) NOT NULL auto_increment primary key COMMENT '번호', -- 번호
+	code       CHAR(4) NOT NULL COMMENT '제품코드', -- 제품코드
+	price INT(11)     NOT NULL COMMENT '제품단가', -- 제품단가
+	saleCnt    INT(11) NOT NULL COMMENT '판매량', -- 판매량
+	marginRate INT(11) NOT NULL COMMENT '마진율', -- 마진율
+	foreign key (code) references product(code)
+);
+
+	
+-- 판매세부정보
+CREATE TABLE saledetail (
+   no           INT(11) NOT NULL, 
+   sale_price   INT(11) NOT NULL, -- 판매금액
+   addTax       INT(11) NOT NULL, -- 부가세액
+   supply_price INT(11) NOT NULL, -- 공급가액
+   margin_Price  INT(11) NOT NULL, -- 마진액
+   FOREIGN KEY (no) REFERENCES sale (no)
+   on delete cascade
+);
+
+-- 하나의 테이블
+CREATE TABLE salefull (
+  no int(11) NOT NULL AUTO_INCREMENT,
+  code char(4) NOT NULL,
+  price int(11) NOT NULL,
+  saleCnt int(11) NOT NULL,
+  marginRate int(11) NOT NULL,
+  sale_price int(11) NOT NULL,
+  addtax int(11) NOT NULL,
+  supply_price int(11) NOT NULL,
+  margin_Price int(11) NOT NULL,
+  PRIMARY KEY (no),
+  FOREIGN KEY (code) REFERENCES product(code)
+);
+
+-- procedure drop
+DROP PROCEDURE  if exists proc_saledetail_orderby;
+DROP PROCEDURE  if exists proc_sale_stat;
+
+-- trigger drop
+DROP TRIGGER if exists tri_sale_insert_after_detail;
+DROP TRIGGER if exists tri_sale_update_after_detail;
+DROP TRIGGER if exists tri_sale_delete_after_detail;
