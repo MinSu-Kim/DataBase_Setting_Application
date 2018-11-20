@@ -19,7 +19,7 @@ public class InitService extends AbstractService{
 	public void service(String...propFile) {	
 		createTableOrProcedureAndTrigger(propFile[0], "create_database.txt", false);
 		createTableOrProcedureAndTrigger(propFile[0], "create_user_sql.txt", false);
-		createTableOrProcedureAndTrigger(propFile[1], "create_sql.txt", false);
+		createTableOrProcedureAndTrigger(propFile[1], "create_table.txt", false);
 		createTableOrProcedureAndTrigger(propFile[1], "create_procedure_trigger.txt", true);
 	}
 	
