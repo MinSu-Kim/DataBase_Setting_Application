@@ -61,13 +61,9 @@ public class ExportService {
 					sb.append("\n");
 				}
 				backupFileWrite(sb.toString(), exportPath);
-			} catch (UnsupportedEncodingException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -67,12 +67,4 @@ public class MyDataSource {
 		return dataSource;
 	}
 
-	public void close() {
-		try {
-			DataSources.destroy(dataSource);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 }
