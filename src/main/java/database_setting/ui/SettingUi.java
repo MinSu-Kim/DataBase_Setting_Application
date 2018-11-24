@@ -34,7 +34,7 @@ public class SettingUi extends JFrame implements ActionListener {
 		
 		btnNames = Arrays.asList("초기화", "백업", "복원");
 		
-		setTitle("DBSetting");
+		setTitle("DataBase Management");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 150);
 		contentPane = new JPanel();
@@ -43,9 +43,9 @@ public class SettingUi extends JFrame implements ActionListener {
 		contentPane.setLayout(new GridLayout(0, 1, 10, 0));
 		
 		JPanel btnPannel = new JPanel();
-		btnPannel.setBorder(new TitledBorder(null, "데이터베이스 설정", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		btnPannel.setBorder(new TitledBorder(null, "데이터베이스 관리 메뉴", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPane.add(btnPannel);
-		btnPannel.setLayout(new GridLayout(1, 0, 0, 0));
+		btnPannel.setLayout(new GridLayout(1, 0, 10, 0));
 		
 		for(String btnTitle : btnNames) {
 			JButton btn = new JButton(btnTitle);
