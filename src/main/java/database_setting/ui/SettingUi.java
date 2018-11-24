@@ -14,7 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import database_setting.service.ExportService;
 import database_setting.service.ImportService;
@@ -44,7 +43,7 @@ public class SettingUi extends JFrame implements ActionListener {
 		contentPane.setLayout(new GridLayout(0, 1, 10, 0));
 		
 		JPanel btnPannel = new JPanel();
-		btnPannel.setBorder(new TitledBorder(null, "Coffee 관리지 설정", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		btnPannel.setBorder(new TitledBorder(null, "데이터베이스 설정", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPane.add(btnPannel);
 		btnPannel.setLayout(new GridLayout(1, 0, 0, 0));
 		
@@ -60,27 +59,31 @@ public class SettingUi extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand()) {
 			case "초기화"	:
-				initService.service("db.properties", "db2.properties");
+				initService.service(filePath("SQL File 디렉터리 선택", true));
 				break;
 			case "백업":
-				exportService.service("db2.properties");
+				exportService.service(filePath("백업 디렉터리 선택", false));
 				break;
 			case "복원":
-				importService.service("db2.properties");
+				importService.service(filePath("DataFiles 디렉터리 선택", true));
 				break;
 		}
+	
 		JOptionPane.showMessageDialog(null, e.getActionCommand() + " 완료");
 	}
 
-	public String filePath() {
+	public String filePath(String dialogTitle, boolean isOpen) {
 		JFileChooser chooser = new JFileChooser();
-//		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//디렉터리 선택
-		
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("import file", "txt");
-		chooser.setFileFilter(filter);
+		chooser.setDialogTitle(dialogTitle);
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//디렉터리 선택
 		
 		chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
-		int ret = chooser.showOpenDialog(null);
+		int ret = -1;
+		if (isOpen) {
+			ret = chooser.showOpenDialog(null);
+		}else {
+			ret = chooser.showSaveDialog(null);
+		}
 		if (ret != JFileChooser.APPROVE_OPTION) {
 			JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다", "경고", JOptionPane.WARNING_MESSAGE);
 			return null;

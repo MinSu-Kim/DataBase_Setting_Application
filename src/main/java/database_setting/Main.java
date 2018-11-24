@@ -4,7 +4,7 @@ import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import database_setting.jdbc.MySQLJdbcUtil;
+import database_setting.jdbc.MyDataSource;
 import database_setting.ui.SettingUi;
 
 public class Main {
@@ -17,7 +17,7 @@ public class Main {
 					frame.addWindowListener(new WindowAdapter() {
 						@Override
 						public void windowClosing(WindowEvent e) {
-							MySQLJdbcUtil.close();
+							MyDataSource.getInstance().close();
 						}
 					});
 					frame.setVisible(true);

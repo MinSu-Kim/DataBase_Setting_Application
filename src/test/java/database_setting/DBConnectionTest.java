@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import database_setting.jdbc.ConnectionProvider;
 import database_setting.jdbc.LogUtil;
-import database_setting.jdbc.MySQLJdbcUtil;
 
 public class DBConnectionTest {
 	static DataSource ds;
@@ -36,7 +36,7 @@ public class DBConnectionTest {
 
 	@Test
 	public void testConnectionProvider() throws SQLException {
-		try(Connection con = MySQLJdbcUtil.getConnection("db.properties")){
+		try(Connection con = ConnectionProvider.getConnection("db.properties")){
 			LogUtil.prnLog(con.toString());
 			Assert.assertNotNull(con);
 		}

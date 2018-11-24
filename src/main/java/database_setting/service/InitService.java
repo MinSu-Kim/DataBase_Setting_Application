@@ -1,76 +1,75 @@
 package database_setting.service;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
+import java.sql.Statement;
+import java.util.Arrays;
 
 import database_setting.jdbc.ConnectionProvider;
 import database_setting.jdbc.LogUtil;
 
-public class InitService extends AbstractService{
-	
-	@Override
-	public void service(String...propFile) {	
-		createTableOrProcedureAndTrigger(propFile[0], "create_database.txt", false);
-		createTableOrProcedureAndTrigger(propFile[0], "create_user_sql.txt", false);
-		createTableOrProcedureAndTrigger(propFile[1], "create_table.txt", false);
-		createTableOrProcedureAndTrigger(propFile[1], "create_procedure_trigger.txt", true);
+public class InitService {
+
+	public void service(String dirPath) {
+		File sqlDir = new File(dirPath);
+		File[] sqlFiles = sqlDir.listFiles();
+		Arrays.sort(sqlFiles);
+		for(File sqlFile: sqlFiles) {
+			execSqlStatement(sqlFile);
+		}
 	}
-	
-	private void createTableOrProcedureAndTrigger(String propFile, String execSqlFile, boolean isProcedure) {
-		LogUtil.prnLog("createTableOrProcedureAndTrigger()");
-		try (InputStream is = ClassLoader.getSystemResourceAsStream("sql/" + execSqlFile);
-				BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));) {
+
+	private void execSqlStatement(File execSqlFile) {
+		LogUtil.prnLog("execSqlStatement()");
+		try (Connection con = ConnectionProvider.getConnection("db.properties");
+				Statement stmt = con.createStatement();
+				BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(execSqlFile), "UTF-8"))) {
+			
 			StringBuilder statement = new StringBuilder();
+			boolean isProcedureOfTrigger = false;
 			
 			for (String line; (line = br.readLine()) != null;) {
+				if (line.startsWith("BEGIN") || line.startsWith("begin"))
+					isProcedureOfTrigger = true;
 				if (line.startsWith("--"))
 					continue;
 				if (line.contains("--")) {
-					statement.append(line.substring(0, line.lastIndexOf("-- "))+ "\r\n");
+					statement.append(line.substring(0, line.lastIndexOf("-- ")) + "\r\n");
 				} else {
 					statement.append(line + "\r\n");
 				}
-
-				if (isProcedure) {
-					if (line.endsWith("END;")||line.endsWith("end;")) {
-						executeSQL(propFile, statement.toString());
+				if (isProcedureOfTrigger) {
+					if (line.endsWith("END;") || line.endsWith("end;") ) {
+						stmt.addBatch(statement.toString());
+						LogUtil.prnLog(statement);
 						statement.setLength(0);
+						isProcedureOfTrigger = false;
 					}
 				}else {
 					if (line.endsWith(";")) {
-						executeSQL(propFile,statement.toString());
+						stmt.addBatch(statement.toString());
+						LogUtil.prnLog(statement);
 						statement.setLength(0);
 					}
 				}
 			}
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void executeSQL(String propFile, String sql) {
-		try (Connection con = ConnectionProvider.getConnection(propFile);
-				PreparedStatement pstmt = con.prepareStatement(sql)) {
-			LogUtil.prnLog(pstmt);
-			pstmt.execute();
+			stmt.executeBatch();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-	}
-
-	@Override
-	protected List<String> getTables() {
-		throw new UnsupportedOperationException();
 	}
 
 }
