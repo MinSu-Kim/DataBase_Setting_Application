@@ -18,17 +18,16 @@ public class MyDataSource {
 	private DataSource dataSource;
 	private Properties properties;
 
+	public static MyDataSource getInstance() {
+		return instance;
+	}
+	
 	public static MyDataSource getInstance(String propPath) {
 		instance.setPropPath(propPath);
 		return instance;
 	}
 
-	public static MyDataSource getInstance() {
-		return instance;
-	}
-
-	private MyDataSource() {
-	}
+	private MyDataSource() {}
 
 	public void initDataSource() {
 		properties = loadProperties();
@@ -41,7 +40,7 @@ public class MyDataSource {
 
 			dataSource = DataSources.pooledDataSource(ds_unpooled, overrides);
 		} catch (SQLException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -59,7 +58,7 @@ public class MyDataSource {
 		try (InputStream is = ClassLoader.getSystemResourceAsStream(propPath)) {
 			properties.load(is);
 		} catch (IOException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 		return properties;
 	}
