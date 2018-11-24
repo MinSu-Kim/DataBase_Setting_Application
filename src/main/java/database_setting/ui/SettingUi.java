@@ -57,22 +57,25 @@ public class SettingUi extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		switch(e.getActionCommand()) {
-			case "초기화"	:
-				initService.service(filePath("SQL File 디렉터리 선택", true));
-				break;
-			case "백업":
-				exportService.service(filePath("백업 디렉터리 선택", false));
-				break;
-			case "복원":
-				importService.service(filePath("DataFiles 디렉터리 선택", true));
-				break;
+		try {
+			switch(e.getActionCommand()) {
+				case "초기화"	:
+					initService.service(filePath("SQL File 디렉터리 선택", true));
+					break;
+				case "백업":
+					exportService.service(filePath("백업 디렉터리 선택", false));
+					break;
+				case "복원":
+					importService.service(filePath("DataFiles 디렉터리 선택", true));
+					break;
+			}
+			JOptionPane.showMessageDialog(null, e.getActionCommand() + " 완료");
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다", "경고", JOptionPane.WARNING_MESSAGE);
 		}
-	
-		JOptionPane.showMessageDialog(null, e.getActionCommand() + " 완료");
 	}
 
-	public String filePath(String dialogTitle, boolean isOpen) {
+	public String filePath(String dialogTitle, boolean isOpen) throws Exception {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle(dialogTitle);
 		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//디렉터리 선택
@@ -85,8 +88,7 @@ public class SettingUi extends JFrame implements ActionListener {
 			ret = chooser.showSaveDialog(null);
 		}
 		if (ret != JFileChooser.APPROVE_OPTION) {
-			JOptionPane.showMessageDialog(null, "파일을 선택하지 않았습니다", "경고", JOptionPane.WARNING_MESSAGE);
-			return null;
+			throw new Exception("파일을 선택하지 않았습니다");
 		}
 		return chooser.getSelectedFile().getPath();
 	}
