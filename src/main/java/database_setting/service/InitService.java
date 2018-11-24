@@ -10,8 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import database_setting.jdbc.ConnectionProvider;
 import database_setting.jdbc.LogUtil;
-import database_setting.jdbc.MySQLJdbcUtil;
 
 public class InitService extends AbstractService{
 	
@@ -59,8 +59,8 @@ public class InitService extends AbstractService{
 	}
 
 	private void executeSQL(String propFile, String sql) {
-		try (Connection con = MySQLJdbcUtil.getConnection(propFile);
-				PreparedStatement pstmt = con.prepareStatement(sql);) {
+		try (Connection con = ConnectionProvider.getConnection(propFile);
+				PreparedStatement pstmt = con.prepareStatement(sql)) {
 			LogUtil.prnLog(pstmt);
 			pstmt.execute();
 		} catch (SQLException e) {

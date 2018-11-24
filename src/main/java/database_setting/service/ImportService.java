@@ -6,14 +6,14 @@ import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 
+import database_setting.jdbc.ConnectionProvider;
 import database_setting.jdbc.LogUtil;
-import database_setting.jdbc.MySQLJdbcUtil;
 
 public class ImportService extends AbstractService{
 	
 	@Override
 	public void service(String...propFile) {	
-		try (Connection con = MySQLJdbcUtil.getConnection(propFile[0]);
+		try (Connection con = ConnectionProvider.getConnection(propFile[0]);
 				Statement stmt = con.createStatement()) {
 			stmt.addBatch("SET FOREIGN_KEY_CHECKS = 0");
 			List<String> tables = getTables();

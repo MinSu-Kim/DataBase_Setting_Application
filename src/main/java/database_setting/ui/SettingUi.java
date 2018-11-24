@@ -58,8 +58,6 @@ public class SettingUi extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-/*		String filePath = filePath();
-		LogUtil.prnLog(filePath);*/
 		switch(e.getActionCommand()) {
 			case "초기화"	:
 				initService.service("db.properties", "db2.properties");

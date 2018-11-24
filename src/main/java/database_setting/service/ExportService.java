@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 
-import database_setting.jdbc.MySQLJdbcUtil;
+import database_setting.jdbc.ConnectionProvider;
 
 public class ExportService extends AbstractService{
 
@@ -32,7 +32,8 @@ public class ExportService extends AbstractService{
 
 	private void exportData(String propFile, String sql, String exportPath){
 		StringBuilder sb = new StringBuilder();
-		try(Connection con = MySQLJdbcUtil.getConnection(propFile);	Statement stmt = con.createStatement();	ResultSet rs = stmt.executeQuery(sql)){
+		try(Connection con = ConnectionProvider.getConnection(propFile);
+				Statement stmt = con.createStatement();	ResultSet rs = stmt.executeQuery(sql)){
 			int colCnt = rs.getMetaData().getColumnCount();// 컬럼의 개수
 			while (rs.next()) {
 				for (int i = 1; i <= colCnt; i++) {
