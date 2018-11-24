@@ -12,8 +12,6 @@ repositories {
     jcenter()
 }
 
-mainClassName = 'database_setting.Main'
-
 dependencies {
     // https://mvnrepository.com/artifact/com.mchange/c3p0
 	compile group: 'com.mchange', name: 'c3p0', version: '0.9.5.2'
@@ -33,6 +31,8 @@ jar {
 	version = 1.0
 	baseName= 'Database_Setting_Application'
 	appendix = 'bin'
+	mainClassName = 'database_setting.Main'
+	
 	manifest{
 		attributes 'Title': baseName, 'Version': version, 'Main-Class': mainClassName
 	}
