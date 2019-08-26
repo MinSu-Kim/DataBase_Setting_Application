@@ -1,5 +1,5 @@
 -- db 존재하면 삭제
-drop database if exists coffee2;
+drop database if exists ncs_coffee;
 
 -- db 생성
-create database coffee2;
+create database ncs_coffee;
