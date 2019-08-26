@@ -1,0 +1,36 @@
+{
+	"folders": {},
+	"connections": {
+		"mysql5-16ccbb893d5-56dc20b0226339d4": {
+			"provider": "mysql",
+			"driver": "mysql5",
+			"name": "MySQL - localhost",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"url": "jdbc:mysql://localhost:3306/",
+				"home": "C:\\Program Files\\MySQL\\MySQL Server 5.7",
+				"type": "dev",
+				"handlers": {}
+			}
+		},
+		"mysql5-16ccbb9b53c-18345fcab20a71d6": {
+			"provider": "mysql",
+			"driver": "mysql5",
+			"name": "MySQL - coffee2",
+			"save-password": true,
+			"read-only": false,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "coffee2",
+				"url": "jdbc:mysql://localhost:3306/coffee2",
+				"home": "C:\\Program Files\\MySQL\\MySQL Server 5.7",
+				"type": "dev",
+				"handlers": {}
+			}
+		}
+	}
+}
